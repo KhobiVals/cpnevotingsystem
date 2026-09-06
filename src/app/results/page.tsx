@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Award, BarChart3, CheckCircle2, ArrowRight, ShieldCheck, ChevronRight, Vote } from 'lucide-react'
+import { Award, BarChart3, CheckCircle2, ChevronRight, Vote, ShieldCheck } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { formatDate } from '@/lib/utils'
 
@@ -23,30 +23,32 @@ export default async function PublicResultsListPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans">
+      <div className="h-1.5 bg-gradient-to-r from-red-600 via-amber-400 to-blue-700 w-full"></div>
+
       {/* Navigation Header */}
-      <header className="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md sticky top-0 z-20">
+      <header className="border-b border-slate-200 bg-white/90 backdrop-blur-md sticky top-0 z-20 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-lg shadow-blue-500/20">
+            <div className="w-10 h-10 rounded-xl bg-blue-700 flex items-center justify-center text-white font-bold shadow-md ring-2 ring-amber-400/40">
               <Vote className="w-5 h-5 text-white" />
             </div>
             <div>
-              <span className="text-xl font-bold tracking-tight text-white">DESAG E-Voting</span>
-              <span className="block text-[10px] uppercase tracking-widest text-blue-400 font-semibold">
+              <span className="text-xl font-extrabold tracking-tight text-blue-950">DESAG E-Voting</span>
+              <span className="block text-[10px] uppercase tracking-widest text-amber-600 font-bold">
                 Certified Results Archive
               </span>
             </div>
           </Link>
 
-          <nav className="flex items-center gap-6 text-sm font-medium">
-            <Link href="/" className="text-slate-400 hover:text-white transition-colors">
+          <nav className="flex items-center gap-6 text-sm font-semibold text-slate-700">
+            <Link href="/" className="hover:text-blue-700 transition-colors">
               Home
             </Link>
-            <Link href="/vote" className="text-slate-400 hover:text-white transition-colors">
-              Vote
+            <Link href="/vote" className="hover:text-blue-700 transition-colors">
+              Vote Portal
             </Link>
-            <Link href="/results" className="text-white font-semibold">
+            <Link href="/results" className="text-blue-700 font-bold">
               Results Archive
             </Link>
           </nav>
@@ -56,14 +58,14 @@ export default async function PublicResultsListPage() {
       {/* Main Content */}
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
         <div className="max-w-3xl mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-400 text-xs font-semibold mb-4">
-            <Award className="w-4 h-4" /> Official Declarations
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-amber-300 bg-amber-50 text-amber-900 text-xs font-bold mb-4">
+            <Award className="w-4 h-4 text-amber-600" /> Official Declarations
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-blue-950 tracking-tight">
             Certified Election Results
           </h1>
-          <p className="text-slate-400 mt-3 text-base">
-            Below is the repository of officially declared DESAG election outcomes. Each result set contains Returning Officer certification signatures and complete positional breakdowns.
+          <p className="text-slate-600 mt-3 text-base">
+            Repository of officially declared DESAG election outcomes. Each result set contains Returning Officer certification statements and complete positional breakdowns.
           </p>
         </div>
 
@@ -78,50 +80,50 @@ export default async function PublicResultsListPage() {
               return (
                 <div
                   key={election.id}
-                  className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 flex flex-col justify-between hover:border-slate-700 transition-all shadow-xl"
+                  className="rounded-2xl border-2 border-slate-200 bg-white p-6 flex flex-col justify-between hover:border-blue-400 transition-all shadow-sm hover:shadow-md border-t-4 border-t-blue-700"
                 >
                   <div>
                     <div className="flex items-center justify-between gap-2 mb-3">
-                      <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
-                        {election.academic_year}
+                      <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-100 text-blue-800 border border-blue-200">
+                        Academic Year {election.academic_year}
                       </span>
-                      <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                      <span className="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
                         <CheckCircle2 className="w-3.5 h-3.5" /> Certified &amp; Declared
                       </span>
                     </div>
 
-                    <h2 className="text-xl font-bold text-white mb-2">{election.title}</h2>
-                    
+                    <h2 className="text-xl font-bold text-blue-950 mb-2">{election.title}</h2>
+
                     {election.declaration_statement && (
-                      <p className="text-xs text-slate-400 italic line-clamp-2 mb-4 bg-slate-950/40 p-3 rounded-xl border border-slate-800/60">
+                      <p className="text-xs text-slate-600 italic line-clamp-2 mb-4 bg-slate-50 p-3 rounded-xl border border-slate-200">
                         &quot;{election.declaration_statement}&quot;
                       </p>
                     )}
 
-                    <div className="grid grid-cols-3 gap-3 my-4 p-3 bg-slate-950/60 rounded-xl border border-slate-800/80 text-center">
+                    <div className="grid grid-cols-3 gap-3 my-4 p-3 bg-slate-50 rounded-xl border border-slate-200 text-center">
                       <div>
-                        <div className="text-xs text-slate-400 uppercase font-medium">Registered</div>
-                        <div className="text-sm font-bold text-white mt-0.5">{election.total_voters_registered || 0}</div>
+                        <div className="text-[10px] text-slate-500 uppercase font-bold">Registered</div>
+                        <div className="text-sm font-extrabold text-blue-950 mt-0.5">{election.total_voters_registered || 0}</div>
                       </div>
                       <div>
-                        <div className="text-xs text-slate-400 uppercase font-medium">Votes Cast</div>
-                        <div className="text-sm font-bold text-white mt-0.5">{election.total_votes_cast || 0}</div>
+                        <div className="text-[10px] text-slate-500 uppercase font-bold">Votes Cast</div>
+                        <div className="text-sm font-extrabold text-blue-950 mt-0.5">{election.total_votes_cast || 0}</div>
                       </div>
                       <div>
-                        <div className="text-xs text-slate-400 uppercase font-medium">Turnout</div>
-                        <div className="text-sm font-bold text-emerald-400 mt-0.5">{turnoutPct}%</div>
+                        <div className="text-[10px] text-slate-500 uppercase font-bold">Turnout</div>
+                        <div className="text-sm font-extrabold text-emerald-700 mt-0.5">{turnoutPct}%</div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
-                    <span className="text-xs text-slate-400">
+                  <div className="pt-4 border-t border-slate-200 flex items-center justify-between">
+                    <span className="text-xs text-slate-500 font-medium">
                       Declared: {formatDate(election.declared_at)}
                     </span>
 
                     <Link
                       href={`/results/${election.id}`}
-                      className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs transition-colors flex items-center gap-1.5 shadow-md shadow-blue-600/20"
+                      className="px-4 py-2 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs transition-colors flex items-center gap-1.5 shadow-md shadow-blue-700/20"
                     >
                       <span>View Breakdown</span>
                       <ChevronRight className="w-4 h-4" />
@@ -132,18 +134,18 @@ export default async function PublicResultsListPage() {
             })}
           </div>
         ) : (
-          <div className="p-12 rounded-2xl border border-dashed border-slate-800 bg-slate-900/30 text-center max-w-xl mx-auto my-12">
-            <BarChart3 className="w-12 h-12 text-slate-600 mx-auto mb-4" />
-            <h3 className="text-lg font-bold text-white">No Declared Results Available Yet</h3>
-            <p className="text-slate-400 text-sm mt-2">
+          <div className="p-12 rounded-2xl border-2 border-dashed border-slate-300 bg-white text-center max-w-xl mx-auto my-12">
+            <BarChart3 className="w-12 h-12 text-blue-700 mx-auto mb-4" />
+            <h3 className="text-lg font-bold text-blue-950">No Declared Results Available Yet</h3>
+            <p className="text-slate-600 text-sm mt-2">
               Results will be published here automatically as soon as the Returning Officer certifies and officially declares an election.
             </p>
           </div>
         )}
       </main>
 
-      <footer className="border-t border-slate-800 bg-slate-950 py-8 text-center text-xs text-slate-400">
-        DESAG Electoral Commission &copy; {new Date().getFullYear()} — Public Results System
+      <footer className="border-t border-slate-200 bg-blue-950 py-8 text-center text-xs text-blue-200 font-medium">
+        DESAG Electoral Commission &copy; {new Date().getFullYear()} — Public Certified Results System
       </footer>
     </div>
   )
