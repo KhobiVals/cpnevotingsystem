@@ -10,7 +10,7 @@ Built with **Next.js 16 (App Router)**, **Tailwind CSS v4**, **TypeScript**, and
 
 1. **Voter Security & Anonymity**
    - Cryptographically decoupled secret ballot submission.
-   - SMS PIN / One-Time Password credential delivery via **Vistal SMS API**.
+   - SMS PIN / One-Time Password credential delivery via **BMS Africa SMS API** (`https://app.bms.africa`).
    - Voter session isolation using HTTP-only JWT cookies.
 
 2. **Candidate Polling Agent Portal**
@@ -39,7 +39,7 @@ Built with **Next.js 16 (App Router)**, **Tailwind CSS v4**, **TypeScript**, and
 - **Framework:** Next.js 16 (React 19)
 - **Styling:** Tailwind CSS v4 + Lucide Icons
 - **Database & Auth:** Supabase (PostgreSQL with RLS policies, RPC functions, Auth)
-- **SMS Gateway:** Vistal SMS API
+- **SMS Gateway:** BMS Africa SMS API (`https://app.bms.africa`)
 - **Deployment:** Vercel + GitHub Integration
 
 ---
@@ -54,9 +54,9 @@ NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 
-# Vistal SMS API Integration
-VISTAL_SMS_API_KEY=your-vistal-api-key
-VISTAL_SMS_SENDER_ID=DESAG
+# BMS Africa SMS API Integration (https://app.bms.africa)
+BMS_AFRICA_SMS_API_KEY=your-bms-africa-api-key
+SMS_SENDER_ID=DESAG CENTRAL
 
 # Voter Session Encryption
 VOTER_SESSION_SECRET=min-32-character-secret-key-for-jwt-signing
@@ -64,41 +64,41 @@ VOTER_SESSION_SECRET=min-32-character-secret-key-for-jwt-signing
 
 ---
 
-## Supabase Database Initialization
+## Supabase Step-by-Step Setup Guide
 
-1. Open your **Supabase Dashboard** SQL Editor.
-2. Run `supabase/migrations/001_initial_schema.sql` to construct tables, enums, triggers, and the `submit_vote` RPC function.
-3. Run `supabase/migrations/002_rls_policies.sql` to enforce Row Level Security rules.
-4. (Optional) Run `supabase/seed.sql` to populate sample notification templates and initial admin profile data.
+### 1. Create a Supabase Project
+1. Go to [https://supabase.com](https://supabase.com) and sign in.
+2. Click **New Project** and choose a name (e.g. `desag-voting`).
+3. Set your Database Password and select your region.
+
+### 2. Run Database Migrations
+1. In your Supabase Dashboard, click on **SQL Editor** in the left sidebar.
+2. Click **New Query**.
+3. Copy the full content of [`supabase/migrations/001_initial_schema.sql`](file:///h:/APPS/cpnevotingsystem/supabase/migrations/001_initial_schema.sql) and paste it into the SQL editor, then click **Run**.
+4. Create another query, copy [`supabase/migrations/002_rls_policies.sql`](file:///h:/APPS/cpnevotingsystem/supabase/migrations/002_rls_policies.sql), paste and click **Run**.
+5. (Optional) Run [`supabase/seed.sql`](file:///h:/APPS/cpnevotingsystem/supabase/seed.sql) to insert initial notification templates and admin profiles.
+
+### 3. Copy API Keys to Vercel
+From **Project Settings &gt; API**:
+- Copy **Project URL** &rarr; `NEXT_PUBLIC_SUPABASE_URL`
+- Copy **anon / public key** &rarr; `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- Copy **service_role key** &rarr; `SUPABASE_SERVICE_ROLE_KEY`
+
+---
+
+## BMS Africa SMS API Setup Guide
+
+1. Log into your **BMS Africa Dashboard** at [https://app.bms.africa/dashboard/sms/overview](https://app.bms.africa/dashboard/sms/overview).
+2. Go to **API &amp; Integrations / API Keys** and generate an API Key.
+3. Add `BMS_AFRICA_SMS_API_KEY` to your Vercel Environment Variables.
+4. Set `SMS_SENDER_ID` to your approved Sender ID (e.g. `DESAG CENTRAL`).
 
 ---
 
 ## Deployment to GitHub & Vercel
 
-1. **Commit and Push to GitHub:**
-   ```bash
-   git add .
-   git commit -m "Complete DESAG Election Management System implementation"
-   git push origin main
-   ```
-
-2. **Connect to Vercel:**
-   - Import the GitHub repository into your Vercel dashboard.
-   - Add all environment variables listed above in **Project Settings > Environment Variables**.
-   - Trigger deployment.
-
----
-
-## System Architecture & Portals
-
-- `/` &mdash; Public Landing & Electoral Portal Directory
-- `/vote` &mdash; Voter Login & Authentication
-- `/vote/[electionId]/ballot` &mdash; Interactive Secret Ballot Voting Interface
-- `/vote/[electionId]/confirmed` &mdash; Post-vote Cryptographic Receipt
-- `/results` &mdash; Certified Public Results Archive
-- `/admin/login` &mdash; Electoral Commission Login
-- `/admin/dashboard` &mdash; Admin Monitoring & Control Panel
-- `/admin/elections/[id]` &mdash; Election Setup, Positions, Candidates, Voters & Live Results
-- `/agent/login` &mdash; Polling Agent Login
-- `/agent/review` &mdash; Polling Agent Endorsement & Objection Portal
-- `/returning-officer/declare/[id]` &mdash; Official Declaration Certification
+```bash
+git add .
+git commit -m "Update BMS Africa SMS API integration and Supabase documentation"
+git push origin main
+```

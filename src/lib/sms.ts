@@ -11,12 +11,12 @@ export interface SendSmsParams {
 
 export async function sendSms(params: SendSmsParams): Promise<{ success: boolean; error?: string }> {
   const formattedPhone = formatPhoneNumber(params.recipient)
-  const apiKey = process.env.VISTAL_SMS_API_KEY
-  const senderId = process.env.VISTAL_SMS_SENDER_ID || 'DESAG'
+  const apiKey = process.env.BMS_AFRICA_SMS_API_KEY || process.env.VISTAL_SMS_API_KEY
+  const senderId = process.env.SMS_SENDER_ID || process.env.VISTAL_SMS_SENDER_ID || 'DESAG'
 
   const supabase = await createAdminClient()
 
-  // Insert pending log
+  // Insert pending log into database
   const { data: log, error: logErr } = await supabase
     .from('sms_logs')
     .insert({
@@ -35,7 +35,7 @@ export async function sendSms(params: SendSmsParams): Promise<{ success: boolean
   }
 
   if (!apiKey) {
-    console.warn('VISTAL_SMS_API_KEY is not set. Simulating SMS dispatch.')
+    console.warn('SMS API Key is not set. Simulating SMS dispatch.')
     if (log?.id) {
       await supabase
         .from('sms_logs')
@@ -46,16 +46,22 @@ export async function sendSms(params: SendSmsParams): Promise<{ success: boolean
   }
 
   try {
-    const res = await fetch('https://api.vistalsms.com/send', {
+    // BMS Africa SMS API endpoint integration
+    const apiEndpoint = process.env.BMS_AFRICA_SMS_URL || 'https://app.bms.africa/api/v1/sms/send'
+
+    const res = await fetch(apiEndpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${apiKey}`,
+        'api-key': apiKey,
       },
       body: JSON.stringify({
         sender: senderId,
         recipient: formattedPhone,
+        to: formattedPhone,
         message: params.message,
+        text: params.message,
       }),
     })
 
