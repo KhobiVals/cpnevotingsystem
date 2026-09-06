@@ -1,9 +1,15 @@
 import { createBrowserClient } from '@supabase/ssr'
 
-// Client-side Supabase client (uses anon key — subject to RLS)
 export function createClient() {
-  return createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
+  const url =
+    process.env.NEXT_PUBLIC_SUPABASE_URL && !process.env.NEXT_PUBLIC_SUPABASE_URL.includes('your-project')
+      ? process.env.NEXT_PUBLIC_SUPABASE_URL
+      : 'https://placeholder.supabase.co'
+
+  const anonKey =
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY && !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY.includes('your-')
+      ? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder'
+
+  return createBrowserClient(url, anonKey)
 }
