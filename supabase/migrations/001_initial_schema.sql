@@ -336,9 +336,10 @@ CREATE TABLE notification_templates (
   body TEXT NOT NULL,
   is_global BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE(template_key, COALESCE(election_id::text, 'global'))
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+CREATE UNIQUE INDEX IF NOT EXISTS uq_notification_templates_key ON notification_templates (template_key, (COALESCE(election_id::text, 'global')));
 
 -- ============================================================
 -- SMS LOGS
